@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    #heading{
+        text-align: center;
+       
+    }
+    .buttons{
+        display: flex;
+        margin:100px auto;
+        width: 50%;
+        justify-content: space-around;
+        
+    }
+    .buttons button{
+
+        
+        background-color: transparent;
+        border: 2px solid black;
+        border-radius: 15px;
+        aspect-ratio: 1;
+        font-size: 20px;
+        width: 100px;
+    }
+    .buttons button:hover{
+        background-color: rgb(160, 161, 161);
+    }
+.line{
+    width: 80%;
+    margin: auto;
+    border: 2px solid black;
+}
+.result-computer{
+    color: black;
+    font-weight: 600;
+}
+h3{
+    text-align: center;
+    font-size: 25px;
+    font-weight: 700;
+}
+h3[data-result='Draw']{
+    color: yellow;
+
+}
+ h3[data-result='Won'] {
+ color: green;
+}
+h3[data-result='Lost']{
+    color: red;
+}
+p{
+    text-align: center;
+    font-size: 19px;
+}
+    </style>
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function() {
+        let a = document.querySelector(".buttons");
+        
+        let child=a.getElementsByTagName('button')
+        for(let i=0;i<child.length;i++){
+        child[i].addEventListener('click',(event)=>{
+            let get=async()=>{
+               let serverResult= await fetch('http://localhost:8000/result').then((ans)=>{
+                
+                 return ans.json()
+                }).catch(()=>{
+                    console.log('error occured')
+                })
+
+                console.log(serverResult.result,'Result from server')
+              if(serverResult!==undefined){
+                let pressed=event.target.innerHTML
+                
+                let keyPressed=pressed
+                console.log('actual key pressed',keyPressed)
+                let status;
+                if(serverResult.result===keyPressed){
+                    console.log('Key pressed',keyPressed)
+                    status='Draw'
+                }
+                else if(!((serverResult.result==='Stone'&&keyPressed==='Paper')||(serverResult.result==='Paper'&&keyPressed==='Scissors')||(serverResult.result==='Scissors'&&keyPressed==='Stone'))){
+                    status='Lost'
+
+                }
+                else{
+                    status='Won'
+                }
+                console.log(status)
+                const parentResult=document.querySelector('.result')
+                const child=parentResult.getElementsByTagName('p')
+                if(child.length===0){
+                const heading=document.createElement('h3')
+                heading.className='result'
+                heading.setAttribute('data-result',status)
+                heading.innerHTML=status
+                document.querySelector('.result').appendChild(heading)
+                const node=document.createElement('p')
+                node.className='result-computer'
+                node.innerHTML=`Computer: ${serverResult.result}`
+                document.querySelector('.result').appendChild(node)
+
+                }
+                else{
+                    document.getElementsByTagName('h3')[0].innerHTML=`${status}`
+                    document.getElementsByTagName('h3')[0].setAttribute('data-result',status)
+                    document.getElementsByTagName('p')[0].innerHTML=`Computer: ${serverResult.result}`
+                }
+                  
+              }
+        }
+        get()
+    }
+        )
+        }
+        
+    });
+    </script>
+</head>
+<body>
+    <h1 id="heading">Stone-paper-scissors</h1>
+    <div class="buttons">
+    <button class="bbb">Stone</button>
+    <button class="bbb">Paper</button>
+    <button class="bbb">Scissors</button>
+    
+</div>
+<div class="line"></div>
+<div class="result">
+
+</div>
+<div>
+
+</div>
+</body>
+</html>
