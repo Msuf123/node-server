@@ -17,7 +17,7 @@ fs.readFile('./index.html').then((data)=>{
 
 })
 }
-else if('/result'){
+else if(req.url==='/result'){
     
     let allResult=['Stone','Paper','Scissors']
     const randomNumber=Math.round(Math.random()*2)
