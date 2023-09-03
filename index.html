@@ -66,7 +66,7 @@ p{
         for(let i=0;i<child.length;i++){
         child[i].addEventListener('click',(event)=>{
             let get=async()=>{
-               let serverResult= await fetch('http://localhost:8000/result').then((ans)=>{
+               let serverResult= await fetch('https://node-server-production-a535.up.railway.app/result').then((ans)=>{
                 
                  return ans.json()
                 }).catch(()=>{
